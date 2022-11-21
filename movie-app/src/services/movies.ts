@@ -1,11 +1,7 @@
 import axios from "axios";
-import { FAVOURITE_MOVIES_URL, BASE_API_URL } from "../constants/constants";
+import { toast } from "react-toastify";
+import { BASE_API_URL, FAVOURITE_MOVIES } from "../constants/constants";
 import IMovie from "../model/IMovie";
-
-const getFavouritMovies = async () => {
-    const favouritMovies = await axios.get< IMovie [] >(FAVOURITE_MOVIES_URL);
-    return favouritMovies.data;
-}
 
 const getMoviesByCategory = async (movieCategory : string) => {
     const movieURL = BASE_API_URL + "/" + movieCategory;
@@ -13,16 +9,43 @@ const getMoviesByCategory = async (movieCategory : string) => {
     return favouritMovies.data;
 }
 
-const getMoviesByCategoryAndID = async (movieCategory : string, id: number) => {
+const getMovieByCategoryAndID = async (movieCategory : string, id: number) => {
     const movieURL = BASE_API_URL + "/" + movieCategory + "/" + id;
-    const favouritMovies = await axios.get< IMovie [] >(movieURL);
-    return favouritMovies.data;
+    const movie = await axios.get< IMovie>(movieURL);
+    return movie.data;
 }
 
-const postFavouriteMovie = async (movie : IMovie) => {
+const getMoviesByCategoryAndID = async (movieCategory : string, id: number) => {
+    const movieURL = BASE_API_URL + "/" + movieCategory + "/" + id;
+    const movies = await axios.get< IMovie [] >(movieURL);
+    return movies.data;
+}
 
+const getMovieByTitleAndYear = async (title: string, year : number) => {
+    const response = await axios.get<IMovie[]>(
+      `${BASE_API_URL}/${FAVOURITE_MOVIES}?title=${title}&year=${year}`
+    );
+    if (response.data === null || response.data.length === 0) {
+      return null;
+    }
+    return response.data[0];
+};
+
+const getIdOfLastMovie = async (moviesCategory: string) => {
+
+    const response = await axios.get<IMovie[]>(
+      `${BASE_API_URL}/${moviesCategory}?_sort=id&_order=desc`
+    );
+  
+    if (response.data === null || response.data.length === 0) {
+      return 0;
+    }
+    return response.data[0].id ?? 0;
+};
+
+const addMovieByCategory = async (movie : IMovie, moviesCategory : string ) => {
     const favoriteMovies = await axios.post< IMovie> (
-        FAVOURITE_MOVIES_URL,
+        `${BASE_API_URL}/${moviesCategory}`,
         movie, 
         {
             headers : {
@@ -33,9 +56,28 @@ const postFavouriteMovie = async (movie : IMovie) => {
     return favoriteMovies.data;
 }
 
+const removeMovieById = async (id: string | number, movieCategory:string, msg: string) => {
+    const response = await axios.delete<IMovie>(
+        `${BASE_API_URL}/${movieCategory}/${id}`
+    );
+    toast.success(msg);
+    
+    //window.location.reload();
+    return response.data;
+};
+
+const getMoviesByTitleContains = async (movieCategory : string) => {
+    const movieURL = BASE_API_URL + "/" + movieCategory;
+    const favouritMovies = await axios.get< IMovie [] >(movieURL);
+    return favouritMovies.data;
+}
+
 export {
-    getFavouritMovies,
-    postFavouriteMovie,
+    addMovieByCategory,
     getMoviesByCategory,
-    getMoviesByCategoryAndID
+    getMovieByTitleAndYear,
+    getMovieByCategoryAndID,
+    getIdOfLastMovie,
+    getMoviesByCategoryAndID,
+    removeMovieById
 };

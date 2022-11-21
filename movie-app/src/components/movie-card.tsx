@@ -5,53 +5,16 @@ import AddToFavourite from './add-to-favourite';
 import RemoveFavourite from './remove-favourite';
 import MovieMoreInfo from './movie-more-info';
 
-// const NO_IMAGE_FOUND = "../../images/no_image.jpg";
-
 type MovieModel = {
   movie: IMovie;
   url: string;
 }
 
-// const checkImage = (posterurl: string) => {
-
-//   var request = new XMLHttpRequest();
-//   request.open("GET", posterurl, true);
-//   request.onreadystatechange = function () {
-//     if(request.readyState === 4){
-//       if(request.status === 200 ){
-//         request.send();
-//       }
-//       else {
-//         posterurl = NO_IMAGE_FOUND;
-//       }
-//       console.log("--> ", posterurl);
-//     }
-//   }
-//request.send();
-// try {
-//   request.send();
-// } catch (error : Error | any){
-//   console.log(error.message)
-// }
-
-
-// request.onload = function () {
-//   console.log(request.statusText);
-//   if (request.status === 404) //if(statusText == OK)
-//   {
-//     posterurl = "";
-//   }
-// }
-
-//   return NO_IMAGE_FOUND;
-// }
-
 function MovieCard({ movie, url }: MovieModel) {
   let isFavourite: Boolean = false;
-  if (("/" + url) === FAVOURITE_MOVIES) {
+  if ((url) === FAVOURITE_MOVIES) {
     isFavourite = true;
   }
-
 
   return (
     <Card style={{ width: '17rem', height: '26rem' }}>
@@ -71,7 +34,7 @@ function MovieCard({ movie, url }: MovieModel) {
             isFavourite && (<RemoveFavourite movie={movie} url={url} />)
           }
           {
-            !isFavourite && (<AddToFavourite movie={movie} url={url} />)
+            !isFavourite && (<AddToFavourite movie={movie} movieCategory={url} />)
           }
         </div>
       </Card.Body>

@@ -56,7 +56,6 @@ class MoviesByCategory extends Component<RouteComponentProps<Props>, State> {
     }
 
     moviePageTitleByCategory = (url : string) => {
-        url = "/" + url; 
         switch(url){
             case MOVIES_IN_THEATERS :
                 return "Movies in thaters";
@@ -77,7 +76,6 @@ class MoviesByCategory extends Component<RouteComponentProps<Props>, State> {
 
     render() {
         const { status, movies, error } = this.state;
-        console.log(this.props.match.params.moviesCategory);
         let el;
         switch (status) {
             case 'LOADING':
@@ -101,9 +99,8 @@ class MoviesByCategory extends Component<RouteComponentProps<Props>, State> {
             case 'LOADED':
                 el = (
                     <>
-                        
                         <h1> {this.moviePageTitleByCategory(this.props.match.params.moviesCategory)}</h1>
-                        <hr id='line'/>
+                        <hr />
                         <Row xs={1} md={3} lg={5}>
                             {
                                 movies?.map(

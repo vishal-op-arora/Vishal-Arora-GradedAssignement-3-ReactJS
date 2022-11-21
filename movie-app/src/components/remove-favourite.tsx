@@ -1,11 +1,8 @@
-import axios from "axios";
-import React from "react";
-import { Button, Col, Row, Toast } from "react-bootstrap";
+import React, { useEffect, useState } from "react";
+import { Button, Col, Row } from "react-bootstrap";
 import IMovie from "../model/IMovie";
-import { BASE_API_URL, FAVOURITE_MOVIES } from "../constants/constants"
-import { toast } from "react-toastify";
-import MoviesByCategory from "./movie-by-category";
-import { getMoviesByCategory } from "../services/movies";
+import { FAVOURITE_MOVIES } from "../constants/constants"
+import { getMoviesByCategory, removeMovieById } from "../services/movies";
 import MovieCard from "./movie-card";
 
 type MovieModel = {
@@ -15,10 +12,11 @@ type MovieModel = {
 
 function RemoveFavourite({ movie, url }: MovieModel) {
 
+    const msg = `\"${movie.title}\" movie successfully removed from favourites !!!`;
     return (
         <React.Fragment>
             <div style={({ marginBottom: '0.8rem', fontSize: '1em' })}>
-                <Button onClick={() => { removeFavouritMovieById(movie.id, movie.title) }} key={movie.title} style={{ width: '13em', backgroundColor:'red', borderColor:'red' }}>Remove Favourite 
+                <Button onClick={() => { removeFavMovieAndUpdate(movie.id, FAVOURITE_MOVIES, msg) }} key={movie.title} style={{ width: '13em', backgroundColor: 'red', borderColor: 'red' }}>Remove Favourite
                 </Button>
             </div>
         </React.Fragment>
@@ -26,38 +24,46 @@ function RemoveFavourite({ movie, url }: MovieModel) {
     )
 };
 
-const removeFavouritMovieById = async (id: string | number, title: string) => {
-    const response = await axios.delete<IMovie>(
-        `${BASE_API_URL}${FAVOURITE_MOVIES}/${id}`
-    );
-    toast.success(`\"${title}\" movie successfully removed from favourites !!!`);
-    reloadMovieList();
-    return response.data;
-};
 
 
-const reloadMovieList = async () => {
-    const movies: IMovie[] = await getMoviesByCategory('favourit');
+
+const removeFavMovieAndUpdate = (movieID : number, movieCat: string, msg: string) => {
+    removeMovieById(movieID, FAVOURITE_MOVIES, msg);
+    console.log();
+    //UpdateMovie();
+
+}
+
+function UpdateMovie () {
+    const [movies, setMovies] = useState<IMovie[]>([]);
+    let favMovies : IMovie[];
+    useEffect(() => {
+        const getAllFavouriteMovies = async () => {
+            favMovies = await getMoviesByCategory(FAVOURITE_MOVIES);
+            setMovies(favMovies);
+        }
+
+        getAllFavouriteMovies();
+    }, []);
+
     
-
-    const element  = (
+    return (
         <>
-            <h1> Favourit movies</h1>
+            <h1>Favourit movies</h1>
             <hr />
             <Row xs={1} md={3} lg={5}>
                 {
                     movies?.map(
                         (movie) => (
                             <Col key={movie.id} className="d-flex my-2">
-                                <MovieCard movie={movie} url={'favourite'} />
+                                <MovieCard movie={movie} url={FAVOURITE_MOVIES} />
                             </Col>
                         )
                     )
                 }
             </Row>
-        </>);
-    let el = document.getElementById('line');
-    
+        </>
+    );
 }
 
 export default RemoveFavourite;
