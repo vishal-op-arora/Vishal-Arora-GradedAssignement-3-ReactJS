@@ -8,9 +8,10 @@ import MovieMoreInfo from './movie-more-info';
 type MovieModel = {
   movie: IMovie;
   url: string;
+  removeMovieFromFavourite : () => void;
 }
 
-function MovieCard({ movie, url }: MovieModel) {
+function MovieCard({ movie, url, removeMovieFromFavourite }: MovieModel) {
   let isFavourite: Boolean = false;
   if ((url) === FAVOURITE_MOVIES) {
     isFavourite = true;
@@ -31,7 +32,7 @@ function MovieCard({ movie, url }: MovieModel) {
 
         <div className="position-absolute bottom-0">
           {
-            isFavourite && (<RemoveFavourite movie={movie} url={url} />)
+            isFavourite && (<RemoveFavourite movie={movie} url={url} removeMovieFromFavourite={removeMovieFromFavourite} />)
           }
           {
             !isFavourite && (<AddToFavourite movie={movie} movieCategory={url} />)

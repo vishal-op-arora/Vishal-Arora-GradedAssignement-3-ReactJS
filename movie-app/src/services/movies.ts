@@ -61,16 +61,8 @@ const removeMovieById = async (id: string | number, movieCategory:string, msg: s
         `${BASE_API_URL}/${movieCategory}/${id}`
     );
     toast.success(msg);
-    
-    //window.location.reload();
     return response.data;
 };
-
-// const getMoviesByTitleContains = async (movieCategory : string) => {
-//     const movieURL = BASE_API_URL + "/" + movieCategory;
-//     const favouritMovies = await axios.get< IMovie [] >(movieURL);
-//     return favouritMovies.data;
-// }
 
 export {
     addMovieByCategory,

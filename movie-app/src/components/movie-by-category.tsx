@@ -105,6 +105,17 @@ class MoviesByCategory extends Component<RouteComponentProps<Props>, State> {
         }
     }
 
+    removeMovieFromFavourite = async () => {
+        this.setState({
+            status: 'LOADING'
+        });
+        const moviesToShow = await getMoviesByCategory(FAVOURITE_MOVIES);
+        this.setState({
+            status: 'LOADED',
+            moviesToShow
+        });
+     }
+
     render() {
         const { status, moviesToShow, error, searchString } = this.state;
         let el;
@@ -156,7 +167,7 @@ class MoviesByCategory extends Component<RouteComponentProps<Props>, State> {
                                 moviesToShow?.map(
                                     (movie) => (
                                         <Col key={movie.id} className="d-flex my-2">
-                                            <MovieCard movie={movie} url={this.props.match.params.moviesCategory} />
+                                            <MovieCard movie={movie} url={this.props.match.params.moviesCategory} removeMovieFromFavourite={this.removeMovieFromFavourite}/>
                                         </Col>
                                     )
                                 )
@@ -173,6 +184,5 @@ class MoviesByCategory extends Component<RouteComponentProps<Props>, State> {
         return el;
     };
 }
-
 
 export default MoviesByCategory; 
