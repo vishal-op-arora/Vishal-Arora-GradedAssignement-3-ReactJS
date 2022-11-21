@@ -30,14 +30,9 @@ function RemoveFavourite({ movie, removeMovieFromFavourite }: MovieModel) {
     )
 };
 
-
-
-
 const removeFavMovieAndUpdate = async (movieID : number, movieCat: string, msg: string, removeMovieFromFavourite : () => void) => {
     const removedMovie= await removeMovieById(movieID, movieCat, msg);
     removeMovieFromFavourite();
 }
 
 export default RemoveFavourite;
-
-
