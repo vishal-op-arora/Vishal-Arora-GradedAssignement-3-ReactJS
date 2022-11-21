@@ -24,24 +24,23 @@ function AddToFavourite ( {movie, movieCategory} : MovieModel) {
 };
 
 async function addFavouriteMovie  (id : number, movieCategory : string) {
-    
     try {
 
         const favouriteMovie : IMovie = await getMovieByCategoryAndID(movieCategory, id);
         const movieByTitleAndYear = await getMovieByTitleAndYear(favouriteMovie.title, favouriteMovie.year);
 
         if(movieByTitleAndYear !== null){
-            toast.error(`\"${favouriteMovie.title}\" movie already added to favourites !!!`);
+            toast.error(`"${favouriteMovie.title}" movie already added to favourites !!!`);
             return;
         }
 
         const lastMovieID : number = await getIdOfLastMovie(FAVOURITE_MOVIES);
         favouriteMovie.id = lastMovieID + 1;
         await addMovieByCategory(favouriteMovie, FAVOURITE_MOVIES );
-        toast.success(`${favouriteMovie.title}\" movie successfully added to favourites !!!`);
+        toast.success(`${favouriteMovie.title}" movie successfully added to favourites !!!`);
     }
     catch (error : any) {
-
+        toast.error(`Error while adding movie to favourites !!!`);
     }
 }
 

@@ -1,6 +1,7 @@
 import { Nav, Form, Navbar, Container } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
 import { FAVOURITE_MOVIES, MOVIES_COMING, MOVIES_IN_THEATERS, TOP_RATED_MOVIES, TOP_RATED_MOVIES_INDIA } from '../constants/constants';
+import MoviesByCategory from './movie-by-category';
 
 const NavigationBar = () => {
 
@@ -22,16 +23,18 @@ const NavigationBar = () => {
                         <Nav.Link to={TOP_RATED_MOVIES} as={NavLink}>Top rated</Nav.Link>
                         <Nav.Link to={FAVOURITE_MOVIES} as={NavLink}>Favourites</Nav.Link>
                     </Nav>
-
-                    <Form className="d-flex">
+                    
+                    
+                    {/* <Form className="d-flex">
                         <Form.Control
                         type="search"
                         placeholder="Search"
                         className="me-6"
                         aria-label="Search"
+                        onChange={MoviesByCategory.updateValue}
                         style = {{width:'25em'}}
                         />
-                    </Form>
+                    </Form> */}
                 </Container>
             </Navbar>
 

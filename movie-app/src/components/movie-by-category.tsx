@@ -26,6 +26,35 @@ class MoviesByCategory extends Component<RouteComponentProps<Props>, State> {
         searchString: ''
     };
 
+    updateValue = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const { value } = event.target;
+
+        this.setState(
+            state => {
+                return {
+                    searchString: value
+                }
+            },
+            () => {
+                this.searchMovie(this.state.searchString);
+            }
+        )
+    }
+
+    searchMovie(searchString: string) {
+        this.setState({
+            status: 'LOADING'
+        });
+
+        const moviesToShow = this.state.movies?.filter(x => {
+            return x.title.toLowerCase().includes(searchString.toLowerCase());
+        })
+        this.setState({
+            status: 'LOADED',
+            moviesToShow
+        });
+    }
+
     async componentDidMount() {
         await this.reloadMovieList();
     }
@@ -43,9 +72,11 @@ class MoviesByCategory extends Component<RouteComponentProps<Props>, State> {
 
         try {
             const movies = await getMoviesByCategory(this.props.match.params.moviesCategory);
+            const moviesToShow = movies;
             this.setState({
                 status: 'LOADED',
-                movies
+                movies,
+                moviesToShow
             });
         } catch (error) {
             this.setState({
@@ -55,9 +86,9 @@ class MoviesByCategory extends Component<RouteComponentProps<Props>, State> {
         }
     }
 
-    moviePageTitleByCategory = (url : string) => {
-        switch(url){
-            case MOVIES_IN_THEATERS :
+    moviePageTitleByCategory = (url: string) => {
+        switch (url) {
+            case MOVIES_IN_THEATERS:
                 return "Movies in thaters";
 
             case MOVIES_COMING:
@@ -68,14 +99,14 @@ class MoviesByCategory extends Component<RouteComponentProps<Props>, State> {
 
             case TOP_RATED_MOVIES:
                 return "Top reated movies";
-                
+
             case FAVOURITE_MOVIES:
                 return "Favourite movies";
         }
     }
 
     render() {
-        const { status, movies, error } = this.state;
+        const { status, moviesToShow, error, searchString } = this.state;
         let el;
         switch (status) {
             case 'LOADING':
@@ -99,11 +130,30 @@ class MoviesByCategory extends Component<RouteComponentProps<Props>, State> {
             case 'LOADED':
                 el = (
                     <>
-                        <h1> {this.moviePageTitleByCategory(this.props.match.params.moviesCategory)}</h1>
+                        <Row>
+                            <Col>
+                                <h1> {this.moviePageTitleByCategory(this.props.match.params.moviesCategory)}</h1>
+                            </Col>
+                            <Col>
+
+                            </Col>
+
+                            <Col>
+                                <input
+                                    placeholder='Search movie'
+                                    className='me-6'
+                                    value={searchString}
+                                    onChange={this.updateValue}
+                                    style={{ width: '25em', height: '2.5em', marginTop:'10px'}}
+                                />
+                            </Col>
+                        </Row>
+
+
                         <hr />
                         <Row xs={1} md={3} lg={5}>
                             {
-                                movies?.map(
+                                moviesToShow?.map(
                                     (movie) => (
                                         <Col key={movie.id} className="d-flex my-2">
                                             <MovieCard movie={movie} url={this.props.match.params.moviesCategory} />
