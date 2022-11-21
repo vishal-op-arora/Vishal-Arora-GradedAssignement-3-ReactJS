@@ -19,11 +19,11 @@ function MovieCard({ movie, url, removeMovieFromFavourite }: MovieModel) {
 
   return (
     <Card style={{ width: '17rem', height: '26rem' }}>
-      <Card.Img variant="top" src={movie.posterurl} style={{ height: '17rem' }} key={movie.id} alt={movie.title}  />
+      <Card.Img variant="top" src={movie.posterurl} style={{ height: '17rem' }} key={movie.id} alt={movie.title} onClick={() => alert({movie})} />
       <Card.Body>
         <div className="d-flex align-items-start" style={{ gap: '20px' }}>
           <div>
-            <Card.Title>
+            <Card.Title onClick={() => MovieMoreInfo({movie})}>
               {movie.title}
             </Card.Title>
           </div>

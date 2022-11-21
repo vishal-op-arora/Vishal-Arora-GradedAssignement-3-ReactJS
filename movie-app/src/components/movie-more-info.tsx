@@ -22,9 +22,9 @@ function MovieMoreInfo( {movie} : MovieMoreInfoModel) {
 
       <Modal show={show} onHide={handleClose} fullscreen ={true}>
         <Modal.Header closeButton>
-          <Modal.Title style={{marginLeft:'6.5em'}}>{movie.title}</Modal.Title>
+        <Modal.Title style={{marginLeft:'2.2em', fontSize:'5em'}}>{movie.title} ({movie.year})</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
+        <Modal.Body style={{margin:'1em'}}>
           <MovieDetails movie={movie} />
         </Modal.Body>
         <Modal.Footer>

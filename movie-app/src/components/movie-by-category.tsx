@@ -6,6 +6,8 @@ import IMovie from "../model/IMovie";
 import { getMoviesByCategory } from "../services/movies";
 import { LoadingStatus } from "../utils/types";
 import MovieCard from "./movie-card";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
 
 type State = {
     status: LoadingStatus,
@@ -146,12 +148,13 @@ class MoviesByCategory extends Component<RouteComponentProps<Props>, State> {
                                 <h1> {this.moviePageTitleByCategory(this.props.match.params.moviesCategory)}</h1>
                             </Col>
                             <Col>
-
+                       
                             </Col>
 
                             <Col>
+                            
                                 <input
-                                    placeholder='Search movie'
+                                    placeholder={`Search movies in ${this.moviePageTitleByCategory(this.props.match.params.moviesCategory)}`}
                                     className='me-6'
                                     value={searchString}
                                     onChange={this.updateValue}
